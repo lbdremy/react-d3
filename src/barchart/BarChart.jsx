@@ -17,7 +17,10 @@ module.exports = React.createClass({
     margins: React.PropTypes.object,
     height: React.PropTypes.number,
     fill: React.PropTypes.string,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    yScale : React.PropTypes.func,
+    xScale : React.PropTypes.func,
+    yAxisTickFormat : React.PropTypes.func
   },
 
   getDefaultProps() {
@@ -28,7 +31,9 @@ module.exports = React.createClass({
       height: 200,
       margins: {top: 20, right: 30, bottom: 30, left: 30},
       fill: "#3182bd",
-      title: ''
+      title: '',
+      yScale : null,
+      xScale : null
     };
   },
 
@@ -45,14 +50,19 @@ module.exports = React.createClass({
     var sideMargins = margins.left + margins.right;
     var topBottomMargins = margins.top + margins.bottom;
 
-    var yScale = d3.scale.linear()
+    var yScale = this.props.yScale;
+    if (!yScale) {
+      yScale = d3.scale.linear()
       .domain([d3.min([d3.min(values), 0]), d3.max(values)])
       .range([props.height - topBottomMargins, 0]);
+    }
 
-    var xScale = d3.scale.ordinal()
+    var xScale = this.props.xScale;
+    if (!xScale) {
+      xScale = d3.scale.ordinal()
         .domain(labels)
         .rangeRoundBands([0, props.width - sideMargins], 0.1);
-
+    }
     var trans = `translate(${ margins.left },${ margins.top })`;
 
     return (
@@ -73,6 +83,7 @@ module.exports = React.createClass({
             yScale={yScale}
             margins={margins}
             yAxisTickCount={props.yAxisTickCount}
+            tickFormat={props.yAxisTickFormat}
             width={props.width - sideMargins}
             height={props.height - topBottomMargins}
           />

@@ -11,7 +11,6 @@ npm-debug.log
 *.tgz
 
 # Build directory
-build/
 
 #intellij
 .idea/

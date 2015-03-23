@@ -6,7 +6,7 @@ var AxisTicks = require('./AxisTicks');
 var AxisLine = require('./AxisLine');
 var Label = require('./Label');
 
-module.exports = React.createClass({
+module.exports = React.createClass({displayName: "exports",
 
   propTypes: {
     yAxisClassName: React.PropTypes.string,
@@ -19,7 +19,7 @@ module.exports = React.createClass({
     yAxisOffset: React.PropTypes.number
   },
 
-  getDefaultProps() {
+  getDefaultProps:function() {
     return {
       yAxisClassName: 'y axis',
       yOrient: 'left',
@@ -31,15 +31,15 @@ module.exports = React.createClass({
     };
   },
 
-  render() {
+  render:function() {
 
     var props = this.props;
 
     var t;
     if (props.yOrient === 'right') {
-       t = `translate(${props.yAxisOffset + props.width},0)`;
+       t = ("translate(" + (props.yAxisOffset + props.width) + ",0)");
     } else {
-       t = `translate(${props.yAxisOffset},0)`;
+       t = ("translate(" + props.yAxisOffset + ",0)");
     }
 
     var tickArguments;
@@ -52,32 +52,32 @@ module.exports = React.createClass({
     }
 
     return (
-      <g
-        className={props.yAxisClassName}
-        transform={t}
-      >
-        <AxisTicks
-          tickFormat={props.tickFormat}
-          tickArguments={tickArguments}
-          yScale={props.yScale}
-          orient={props.yOrient}
-          height={props.height}
-          width={props.width}
-        />
-        <AxisLine
-          scale={props.yScale}
-          orient={props.yOrient}
-          {...props}
-        />
-        <Label
-          label={props.yAxisLabel}
-          offset={props.yAxisLabelOffset}
-          orient={props.yOrient}
-          margins={props.margins}
-          height={props.height}
-          width={props.width}
-        />
-      </g>
+      React.createElement("g", {
+        className: props.yAxisClassName, 
+        transform: t
+      }, 
+        React.createElement(AxisTicks, {
+          tickFormat: props.tickFormat, 
+          tickArguments: tickArguments, 
+          yScale: props.yScale, 
+          orient: props.yOrient, 
+          height: props.height, 
+          width: props.width}
+        ), 
+        React.createElement(AxisLine, React.__spread({
+          scale: props.yScale, 
+          orient: props.yOrient}, 
+          props)
+        ), 
+        React.createElement(Label, {
+          label: props.yAxisLabel, 
+          offset: props.yAxisLabelOffset, 
+          orient: props.yOrient, 
+          margins: props.margins, 
+          height: props.height, 
+          width: props.width}
+        )
+      )
     );
   }
 
